@@ -1,20 +1,18 @@
 require_relative 'contact'
-require_relative 'contact_database'
 require 'byebug'
 
-ContactDatabase.load_records
-
 def valid_choice(command = '')
-  ['find', 'list', 'new', 'search'].include?(command)
+  ['find', 'list', 'new', 'search', 'delete'].include?(command)
 end
 
-def add_new_contact
-  puts 'Please enter the name (eg. Sana Zareey)'
-  name = $stdin.gets.chomp
-  puts 'Please enter your email (eg. szareey@gmail.com)'
-  email = $stdin.gets.chomp
-  Contact.create(name, email)
-  puts 'Contact created!'
+def add_new_contact 
+  puts 'Please enter the first Name'
+  fname = $stdin.gets.chomp
+  puts 'Please enter the last name'
+  lname = $stdin.gets.chomp
+  puts 'Please enter the phone number (numbers only)'
+  phone_num = $stdin.gets.chomp
+  Contact.create(fname, lname, phone_num)
 end
 
 def run_helper
@@ -25,12 +23,13 @@ def run_helper
   list - List all contacts
   search - search a contact (eg. search mike)
   find # - Find a contact by index value (eg. find 4)
+  delete # - Delete by index number of contact
 
   HELPER
 end
 
 def run_find
-  puts Contact.find(ARGV[1].to_i)
+  puts Contact.find(ARGV[1])
 end
 
 def list_contacts
@@ -41,8 +40,13 @@ def search_contact
   puts Contact.search(ARGV[1])
 end
 
+def delete_contact
+  puts Contact.delete(ARGV[1])
+end
+
+
 def run_error_message
-puts 'invalid input. Type \'help\' for acceptable commands'
+  puts 'invalid input. Type \'help\' for acceptable commands'
 end
 
 case ARGV[0]
@@ -56,6 +60,8 @@ case ARGV[0]
     search_contact  
   when 'help'
     run_helper
+  when 'delete'
+    delete_contact
   else
     run_error_message
 end
